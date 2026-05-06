@@ -7,6 +7,7 @@ import {
   Upload,
   Files,
   MessageSquare,
+  Clock,
   LogOut,
   Menu,
   X,
@@ -23,10 +24,11 @@ export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { name: "Upload Case", href: "/upload", icon: Upload },
-    { name: "All Evidence", href: "/evidence", icon: Files },
-    { name: "Ask LLM", href: "/chat", icon: MessageSquare },
+    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard, matchSubpaths: true },
+    { name: "Upload Case", href: "/upload", icon: Upload, matchSubpaths: true },
+    { name: "All Evidence", href: "/evidence", icon: Files, matchSubpaths: true },
+    { name: "Ask LLM", href: "/chat", icon: MessageSquare, matchSubpaths: false },
+    { name: "History", href: "/chat/history", icon: Clock, matchSubpaths: false },
   ];
 
   const handleLogout = () => {
@@ -85,8 +87,9 @@ export function Sidebar() {
         <nav className="flex-1 overflow-y-auto p-4">
           <div className="space-y-1">
             {navItems.map((item) => {
+              const matchSub = item.matchSubpaths !== false;
               const isActive =
-                pathname === item.href || pathname.startsWith(item.href + "/");
+                pathname === item.href || (matchSub && pathname.startsWith(item.href + "/"));
               const Icon = item.icon;
               return (
                 <Link

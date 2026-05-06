@@ -3,9 +3,6 @@
 import { FileUpload } from "@/components/FileUpload";
 import { CaseForm } from "@/components/CaseForm";
 
-
-
-
 export default function UploadPage() {
   return (
     <div className="p-4 sm:p-8">
