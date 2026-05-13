@@ -3,6 +3,8 @@ dotenv.config();
 
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+
 const app = express();
 
 import userRoutes from './routes/uesr.routes';
@@ -11,6 +13,7 @@ import userRoutes from './routes/uesr.routes';
 // Middlewares
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.use('/api/users', userRoutes);
