@@ -1,5 +1,6 @@
 "use client";
 
+import AuthGuard from "@/components/AuthGuard";
 import { LayoutWrapper } from "@/components/LayoutWrapper";
 
 export default function DashboardLayout({
@@ -7,5 +8,9 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <LayoutWrapper>{children}</LayoutWrapper>;
+  return (
+    <AuthGuard protectedRoute>
+      <LayoutWrapper>{children}</LayoutWrapper>
+    </AuthGuard>
+  );
 }

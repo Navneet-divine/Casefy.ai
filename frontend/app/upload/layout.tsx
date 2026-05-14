@@ -1,5 +1,6 @@
 "use client";
 
+import AuthGuard from "@/components/AuthGuard";
 import { LayoutWrapper } from "@/components/LayoutWrapper";
 
 export default function UploadLayout({
@@ -7,5 +8,9 @@ export default function UploadLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <LayoutWrapper>{children}</LayoutWrapper>;
+  return (
+    <AuthGuard protectedRoute={true}>
+      <LayoutWrapper>{children}</LayoutWrapper>
+    </AuthGuard>
+  );
 }

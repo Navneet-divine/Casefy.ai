@@ -1,6 +1,7 @@
 "use client";
 
 import { useApp } from "@/context/AppContext";
+import axios from "axios";
 import {
   FileText,
   LayoutDashboard,
@@ -13,27 +14,64 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { logout } = useApp();
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const navItems = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard, matchSubpaths: true },
+    {
+      name: "Dashboard",
+      href: "/dashboard",
+      icon: LayoutDashboard,
+      matchSubpaths: true,
+    },
     { name: "Upload Case", href: "/upload", icon: Upload, matchSubpaths: true },
-    { name: "All Evidence", href: "/evidence", icon: Files, matchSubpaths: true },
-    { name: "Ask LLM", href: "/chat", icon: MessageSquare, matchSubpaths: false },
-    { name: "History", href: "/chat/history", icon: Clock, matchSubpaths: false },
+    {
+      name: "All Evidence",
+      href: "/evidence",
+      icon: Files,
+      matchSubpaths: true,
+    },
+    {
+      name: "Ask LLM",
+      href: "/chat",
+      icon: MessageSquare,
+      matchSubpaths: false,
+    },
+    {
+      name: "History",
+      href: "/chat/history",
+      icon: Clock,
+      matchSubpaths: false,
+    },
   ];
 
-  const handleLogout = () => {
-    logout();
-    setIsOpen(false);
+  const handleLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+      await axios.post(
+        `${API_URL}/users/logout`,
+        {},
+        { withCredentials: true },
+      );
+      logout();
+      setIsOpen(false);
+    window.location.href = "/";
+    } catch (err) {
+      console.error("Logout failed", err);
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   const handleNavClick = () => {
@@ -89,7 +127,8 @@ export function Sidebar() {
             {navItems.map((item) => {
               const matchSub = item.matchSubpaths !== false;
               const isActive =
-                pathname === item.href || (matchSub && pathname.startsWith(item.href + "/"));
+                pathname === item.href ||
+                (matchSub && pathname.startsWith(item.href + "/"));
               const Icon = item.icon;
               return (
                 <Link
@@ -124,7 +163,7 @@ export function Sidebar() {
             className="w-full gap-2 text-sidebar-foreground border-sidebar-border hover:bg-sidebar-accent"
           >
             <LogOut className="w-4 h-4" />
-            Logout
+            {isLoggingOut ? "Logging out..." : "Logout"}
           </Button>
         </div>
       </aside>
