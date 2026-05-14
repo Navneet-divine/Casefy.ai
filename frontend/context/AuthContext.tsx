@@ -17,12 +17,14 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   isAuthenticated: boolean;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   isAuthenticated: false,
+  logout: () => undefined,
 });
 
 const API_URL =
@@ -72,12 +74,18 @@ export const AuthContextProvider = ({
     fetchUser();
   }, []);
 
+  const logout = () => {
+    setUser(null);
+    setLoading(false);
+  };
+
   return (
     <AuthContext.Provider
       value={{
         user,
         loading,
         isAuthenticated: !!user,
+        logout,
       }}
     >
       {children}

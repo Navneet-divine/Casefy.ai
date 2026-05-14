@@ -14,17 +14,18 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export function Sidebar() {
   const pathname = usePathname();
-  const router = useRouter();
   const { logout } = useApp();
+  const { logout: authLogout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -64,9 +65,10 @@ export function Sidebar() {
         {},
         { withCredentials: true },
       );
+      authLogout();
       logout();
       setIsOpen(false);
-    window.location.href = "/";
+      window.location.href = "/";
     } catch (err) {
       console.error("Logout failed", err);
     } finally {
