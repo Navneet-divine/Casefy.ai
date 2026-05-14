@@ -1,7 +1,7 @@
-import prisma from "../lib/prisma";
+import prisma from "../lib/prisma.js";
 import { Request, Response } from "express";
-import { comparePassword, hashPassword } from "../utils/bcrypt";
-import { signToken, verifyToken } from "../utils/jwt";
+import { comparePassword, hashPassword } from "../utils/bcrypt.js";
+import { signToken, verifyToken } from "../utils/jwt.js";
 
 
 const isProduction = process.env.NODE_ENV === "production";

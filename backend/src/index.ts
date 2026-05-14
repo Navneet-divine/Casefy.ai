@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 
 const app = express();
 
-import userRoutes from './routes/uesr.routes';
+import userRoutes from './routes/user.routes.js';
 
 
 // Middlewares
