@@ -1,13 +1,16 @@
 import "dotenv/config";
+import { defineConfig, env } from "prisma/config";
 
-export default {
+export default defineConfig({
   schema: "prisma/schema.prisma",
-
-  datasource: {
-    url: process.env.MONGODB_URL,
-  },
 
   migrations: {
     path: "prisma/migrations",
   },
-};
+
+  engine: "classic",
+
+  datasource: {
+    url: env("MONGODB_URL"),
+  },
+});

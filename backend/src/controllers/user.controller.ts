@@ -11,27 +11,31 @@ export const register = async (req: Request, res: Response) => {
     const { fullName, email, password } = req.body;
     console.log("Received registration data:", { fullName, email, password });
 
+    if (!fullName || !email || !password) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
     const userData = {
       fullName,
       email,
       password: await hashPassword(password),
     };
 
-    if (!fullName || !email || !password) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
-
+    console.log('Checking for existing user with email:', email);
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
+    console.log('Existing user result:', existingUser);
 
     if (existingUser) {
       return res.status(409).json({ error: "User already exists" });
     }
 
+    console.log('Creating user with data:', { fullName, email });
     const newUser = await prisma.user.create({
       data: userData,
     });
+    console.log('New user created:', newUser);
 
     const token = signToken(newUser);
 
@@ -45,6 +49,7 @@ export const register = async (req: Request, res: Response) => {
 
     res.status(201).json({ message: "Registration successful", user: newUser,});
   } catch (error) {
+    console.error('Register error:', error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
