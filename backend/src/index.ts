@@ -9,14 +9,36 @@ const app = express();
 
 import userRoutes from './routes/user.routes.js';
 
+const normalizeOrigin = (value: string) => value.replace(/\/+$/, '');
+
+const configuredFrontendOrigins = (process.env.FRONTEND_URL ?? '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const allowedOrigins: string[] = [
+  'http://localhost:3000',
+  ...configuredFrontendOrigins,
+].map(normalizeOrigin);
 
 // Middlewares
 app.use(
   cors({
-    origin: [
-      'http://localhost:3000',
-      process.env.FRONTEND_URL!,
-    ],
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void
+    ) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      const normalizedOrigin = normalizeOrigin(origin);
+      if (allowedOrigins.includes(normalizedOrigin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked for origin: ${normalizedOrigin}`));
+    },
     credentials: true,
   })
 );
