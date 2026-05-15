@@ -1,11 +1,13 @@
 import express from "express";
 const router = express.Router();
-import { register, login, logout, current } from "../controllers/user.controller.js";
+import { register, login, logout, current, forgotPassword, resetPassword } from "../controllers/user.controller.js";
 
 // Register route
 router.post("/register", register);
 router.post("/login", login);
 router.post("/logout", logout);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 router.get("/current", current);
 
 export default router;
