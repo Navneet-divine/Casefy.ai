@@ -12,15 +12,13 @@ const resetPasswordExpires =
   new Date(Date.now() + 1000 * 60 * 15);
 
 
-
 const isProduction = process.env.NODE_ENV === "production";
 const resend = new Resend(process.env.RESEND_API_KEY);
-const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`; // TODO: Save the token and expiration to the database
+const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`; 
 
 export const register = async (req: Request, res: Response) => {
   try {
     const { fullName, email, password } = req.body;
-    console.log("Received registration data:", { fullName, email, password });
 
     if (!fullName || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
