@@ -14,7 +14,7 @@ const resetPasswordExpires =
 
 const isProduction = process.env.NODE_ENV === "production";
 const resend = new Resend(process.env.RESEND_API_KEY);
-const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`; 
+const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -134,15 +134,6 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     await prisma.user.update({
       where: { email },
-      data: {
-        resetPasswordToken: resetToken,
-        resetPasswordExpires,
-      },
-    });
-
-    await prisma.user.update({
-      where: { email },
-
       data: {
         resetPasswordToken: resetToken,
         resetPasswordExpires,

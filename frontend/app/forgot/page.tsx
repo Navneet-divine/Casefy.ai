@@ -38,13 +38,15 @@ export default function ForgotPage() {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${API_URL}/users/forgot`,
+        `${API_URL}/users/forgot-password`,
         { email },
         { withCredentials: true },
       );
 
       if (res.status === 200) {
-        setMessage(res.data?.message || "If that email exists, we'll send instructions.");
+        setMessage(
+          res.data?.message || "If that email exists, we'll send instructions.",
+        );
       } else {
         setError(res.data?.error || "Request failed");
       }
@@ -97,12 +99,19 @@ export default function ForgotPage() {
                 </div>
               )}
 
-              <Button type="submit" disabled={isLoading} className="w-full bg-primary hover:bg-primary/90">
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="cursor-pointer w-full bg-primary hover:bg-primary/90"
+              >
                 {isLoading ? "Sending..." : "Send reset link"}
               </Button>
 
               <p className="text-center text-sm text-muted-foreground">
-                Remembered your password? <Link href="/login" className="text-primary hover:underline">Login</Link>
+                Remembered your password?{" "}
+                <Link href="/login" className="text-primary hover:underline">
+                  Login
+                </Link>
               </p>
             </form>
           </Card>
