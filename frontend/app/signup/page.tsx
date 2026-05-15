@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { FileText, Mail, Lock, User } from "lucide-react";
+import { FileText, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import AuthGuard from "@/components/AuthGuard";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -22,6 +22,8 @@ export default function SignupPage() {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -137,15 +139,32 @@ export default function SignupPage() {
                   <Lock className="w-4 h-4" />
                   Password
                 </label>
-                <Input
-                  type="password"
-                  name="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  disabled={isLoading}
-                  className="bg-background border-border"
-                />
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="S3cur3p@sswOrd"
+                    value={formData.password}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                    className="bg-background border-border pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((s) => !s)}
+                    className="cursor-pointer absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                    disabled={isLoading}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
               </div>
 
               {/* Confirm Password Field */}
@@ -154,15 +173,34 @@ export default function SignupPage() {
                   <Lock className="w-4 h-4" />
                   Confirm Password
                 </label>
-                <Input
-                  type="password"
-                  name="confirmPassword"
-                  placeholder="••••••••"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  disabled={isLoading}
-                  className="bg-background border-border"
-                />
+                <div className="relative">
+                  <Input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    placeholder="S3cur3p@sswOrd"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                    className="bg-background border-border pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((s) => !s)}
+                    className="cursor-pointer absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    aria-label={
+                      showConfirmPassword
+                        ? "Hide confirm password"
+                        : "Show confirm password"
+                    }
+                    disabled={isLoading}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
               </div>
 
               {/* Error Message */}

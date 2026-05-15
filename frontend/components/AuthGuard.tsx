@@ -3,6 +3,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -19,10 +20,7 @@ export default function AuthGuard({
   protectedRoute = false,
   redirectTo = "/",
 }: AuthGuardProps) {
-  const {
-    loading,
-    isAuthenticated,
-  } = useAuth();
+  const { loading, isAuthenticated } = useAuth();
 
   const router = useRouter();
 
@@ -43,21 +41,19 @@ export default function AuthGuard({
   }, [loading, isAuthenticated, protectedRoute, redirectTo, router]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex w-full h-screen items-center justify-center">
+        <Spinner className="text-primary size-8" />
+      </div>
+    );
   }
 
   // Prevent flashing
-  if (
-    protectedRoute &&
-    !isAuthenticated
-  ) {
+  if (protectedRoute && !isAuthenticated) {
     return null;
   }
 
-  if (
-    !protectedRoute &&
-    isAuthenticated
-  ) {
+  if (!protectedRoute && isAuthenticated) {
     return null;
   }
 

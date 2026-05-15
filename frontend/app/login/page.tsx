@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { FileText, Mail, Lock } from "lucide-react";
+import { FileText, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import AuthGuard from "@/components/AuthGuard";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -20,6 +20,7 @@ export default function LoginPage() {
     password: "",
   });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -126,19 +127,34 @@ export default function LoginPage() {
                     <Lock className="w-4 h-4" />
                     Password
                   </label>
-                  <a href="#" className="text-xs text-primary hover:underline">
+                  <Link href="/forgot" className="text-xs text-primary hover:underline">
                     Forgot?
-                  </a>
+                  </Link>
                 </div>
-                <Input
-                  type="password"
-                  name="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  disabled={isLoading}
-                  className="bg-background border-border"
-                />
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="S3cur3p@sswOrd"
+                    value={formData.password}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                    className="bg-background border-border pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((s) => !s)}
+                    className="cursor-pointer absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    disabled={isLoading}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
               </div>
 
               {/* Error Message */}
